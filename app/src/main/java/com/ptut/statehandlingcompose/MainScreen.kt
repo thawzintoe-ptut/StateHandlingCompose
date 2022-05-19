@@ -21,10 +21,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -38,11 +41,16 @@ import androidx.constraintlayout.compose.Dimension
 @Composable
 fun MainScreen() {
     val listState = rememberLazyListState()
+    var spinnerExpanded by remember { mutableStateOf(false) }
+    var selectedMenuIndex by remember {
+        mutableStateOf(0)
+    }
     LazyColumn(
         state = listState,
         modifier = Modifier.fillMaxSize()
             .background(color = Color(0xFFf5f5f5))
     ) {
+
         val menuItems = listOf("Apple", "Ball", "Cat", "Dog", "Elephant", "Florida")
         // pinned when scrolling
         stickyHeader {
@@ -74,7 +82,7 @@ fun MainScreen() {
                     .background(Color.White)
                     .clickable(
                         onClick = {
-                            /*TODO 1.add update menu expand state */
+                            spinnerExpanded = true
                         }
                     )
             ) {
@@ -87,8 +95,7 @@ fun MainScreen() {
                     val (label, iconView) = createRefs()
 
                     Text(
-                        /*TODO update selected menu item */
-                        text = "Please Select Occasion",
+                        text = menuItems[selectedMenuIndex],
                         modifier = Modifier
                             .fillMaxWidth()
                             .constrainAs(label) {
@@ -100,25 +107,10 @@ fun MainScreen() {
                             }
                     )
 
-                    Icon(
-                        painter = painterResource(
-                            id = R.drawable.ic_round_keyboard_arrow_down
-                        ),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(20.dp, 20.dp)
-                            .constrainAs(iconView) {
-                                end.linkTo(parent.end)
-                                top.linkTo(parent.top)
-                                bottom.linkTo(parent.bottom)
-                            }
-                    )
-
                     DropdownMenu(
-                        /*TODO update from state expanded or not */
-                        expanded = false,
+                        expanded = spinnerExpanded,
                         onDismissRequest = {
-                            /*TODO dismiss state for drop down */
+                            spinnerExpanded = false
                         },
                         modifier = Modifier
                             .padding(start = 20.dp, end = 20.dp)
@@ -127,7 +119,8 @@ fun MainScreen() {
                         menuItems.forEachIndexed { index, title ->
                             DropdownMenuItem(
                                 onClick = {
-                                    /*TODO menu select and update display in item */
+                                    selectedMenuIndex = index
+                                    spinnerExpanded = false
                                 }
                             ) {
                                 Text(text = title)
