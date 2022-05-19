@@ -100,12 +100,10 @@ fun MainScreen() {
                             }
                     )
 
-                    val displayIcon: Painter = painterResource(
-                        id = R.drawable.ic_round_keyboard_arrow_down
-                    )
-
                     Icon(
-                        painter = displayIcon,
+                        painter = painterResource(
+                            id = R.drawable.ic_round_keyboard_arrow_down
+                        ),
                         contentDescription = null,
                         modifier = Modifier
                             .size(20.dp, 20.dp)
